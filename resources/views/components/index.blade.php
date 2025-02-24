@@ -7,10 +7,12 @@
 
     <div class="text-center d-flex justify-content-center align-items-center text-warning" style="height: 80vh">
         <h2>Ho Ngoc Qui</h2>
+
+        <p>Truong Cao Dang cao Thang</p>
     </div>
 
 
-    <img src="{{asset('image/hinh_1.jpg')}}" alt="">\
+    <img src="{{asset('image/hinh_1.jpg')}}" alt="">
     
 @endsection
 

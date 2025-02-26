@@ -17,11 +17,6 @@
 
     <h3>{{$name_1}}</h3>
 
-    <p class="mt-5">{{$name_2}}</p>
 
-    <p>{{$name_3}}</p>
-
-    <p>{{$name_4}}</p>
-
-
+    <p>{{$user->Name}}</p>
 @endsection

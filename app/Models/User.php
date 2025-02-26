@@ -18,9 +18,13 @@ class User extends Authenticatable
      * @var list<string>
      */
     protected $fillable = [
-        'name',
-        'email',
-        'password',
+       'first_name',
+        'last_name', 
+        'email', 
+        'password', 
+        'address', 
+        'status', 
+        'role'
     ];
 
     /**
@@ -30,7 +34,6 @@ class User extends Authenticatable
      */
     protected $hidden = [
         'password',
-        'remember_token',
     ];
 
     /**
@@ -45,4 +48,10 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+    public function getnameAttribute()
+    {
+        return "{$this->first_name} {$this->last_name}";
+    }
+
+
 }

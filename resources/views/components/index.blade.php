@@ -5,10 +5,14 @@
 
 @section('content')
 
-    <div class="text-center d-flex justify-content-center align-items-center text-warning" style="height: 80vh">
-        <h2>Ho Ngoc Qui</h2>
+    <div class="text-center d-flex  justify-content-center align-items-center text-warning" style="height: 80vh">
+        <div class="">
+            <h2>Ho Ngoc Qui</h2>
 
-        <p>Truong Cao Dang cao Thang</p>
+
+        <p>{{$user->Name}}</p>
+        </div>
+        
     </div>
 
 

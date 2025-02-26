@@ -4,25 +4,29 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
+use App\Models\User;
+
 class UserController extends Controller
 {
     public function Page()
     {
-        return view('components.index');
+        $user = User::find(1);
+        return view('components.index',compact('user'));
+
+        
     } 
 
     public function Test()
     {
-        $name_1 = 'Quy Ho'; //
+        $name_1 = 'Quy Ho'; 
 
-        $name_2 = "Thinh";
-        
-        $name_3 = "a";
+        $user   = User::find(1);
 
-        $name_4=    "b";
 
-        return view('components.test',compact('name_1','name_2','name_3','name_4'));
+        return view('components.test',compact('name_1','user'));
     }
+
+    
 }
 
 

@@ -19,4 +19,17 @@
 
 
     <p>{{$user->Name}}</p>
+
+
+    <form action="/URL" method="post">
+        @csrf
+        <label for="">Ten Dang Nhap</label>
+        <input name="tendangnhap" type="text">
+
+        <label for="">Mat Khau</label>
+        <input name="password" type="text">
+
+      <button type="submit">Gui</button>
+    
+    </form>
 @endsection

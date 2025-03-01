@@ -6,19 +6,31 @@ use App\Http\Controllers\UserController;
 
 use Illuminate\Support\Facades\Mail;
 
+use App\Http\Controllers\Middleware\CheckUserStatus;
+
+use App\Http\Controllers\LoginController;
 
 
 Route::get('/',[UserController::class,'Home']);
 
-Route::get('/profile/test', [UserController::class, 'Test']);
+Route::get('/sign-up',[UserController::class,'ShowSignUp'])->name('sign-up');
 
-Route::post('/URL',[UserController::class,'Signup']);
+Route::post('/log-in',[UserController::class,'signup'])->name('shop.SignUp');
 
-Route::get('/SignUp',[UserController::class,'ShowSignUp']);
+Route::get('/logon',[UserController::class,'Showlogin'])->name('DashLogin');
 
-Route::post('/SignUp',[UserController::class,'Signup'])->name('shop.SignUp');
+Route::post('/logon',[LoginController::class,'login']);
 
-Route::get('/LogOn',function(){
+
+Route::middleware(['auth:user','checkUserStatus'])->group(function () {
+    Route::get('/dashboard', function()
+    {
+        return view('components.dashboard');
+    });
+    
+});
+
+Route::get('/Login',function(){
     return view('components.login');
 })->name('login');
 

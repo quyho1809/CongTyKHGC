@@ -1,8 +1,7 @@
 @extends('layouts.template')
 
 @section('content')
-    
-<form action="/logon" method="post">
+<form action="{{ route('logon') }}" method="post">
     @csrf
 
     <label for="">Email</label>
@@ -22,14 +21,9 @@
         </script>    
     </div>
 @endif
-
-@if(session('success'))
-<div class="alert alert-danger">
-    {{ session('success') }}
-</div>
-@endif
-</form>
-
-
-
+    @if (session('success'))
+        <div class="alert alert-success">
+            {{ session('success') }}
+        </div>
+    @endif
 @endsection

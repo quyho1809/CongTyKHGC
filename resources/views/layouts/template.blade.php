@@ -21,9 +21,9 @@
                 <a href="/" class="text-white text-decoration-none fs-4">LOGO</a>
                 <ul class="nav">
                     <li class="nav-item"><a href="" class="nav-link text-white">Home</a></li>
-                    <li class="nav-item"><a href="" class="nav-link text-white">Giới Thiệu</a></li>
-                    <li class="nav-item"><a href="" class="nav-link text-white">Log in</a></li>
-                    <li class="nav-item"><a href="/SignUp" class="nav-link text-white">Sign up</a></li>                   
+                    <li class="nav-item"><a href="/dashboard" class="nav-link text-white">Giới Thiệu</a></li>
+                    <li class="nav-item"><a href="/logon" class="nav-link text-white">Log on</a></li>
+                    <li class="nav-item"><a href="/sign-up" class="nav-link text-white">Sign up</a></li>                   
                     <li class="nav-item"><a href="" class="nav-link text-white">Liên Hệ</a></li>
                 </ul>
             </nav>

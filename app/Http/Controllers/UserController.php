@@ -15,18 +15,11 @@ class UserController extends Controller
         $user = User::find(1);
         return view('components.index', compact('user'));
     } 
-
-    public function Test()
-    {
-        $name_1 = 'Quy Ho'; 
-        $user   = User::find(1);
-        return view('components.test', compact('name_1', 'user'));
-    }
-    public function ShowLogin()
+    
+    public function Showlogin()
     {
         return view('components.login');
     }
-    
     public function ShowSignUp()
     {
         return view('components.signup');
@@ -45,7 +38,7 @@ class UserController extends Controller
    
     if ($user) {
         Mail::to($user->email)->send(new WelcomeMail($user));
-        return redirect()->route('login')->with('success', 'Đăng ký thành công! Hãy kiểm tra email của bạn.');
+        return view('components.login')->with('success', 'Đăng ký thành công! Hãy kiểm tra email của bạn.');
 
     }
 

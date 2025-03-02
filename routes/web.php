@@ -22,11 +22,14 @@ Route::get('/logon',[UserController::class,'Showlogin'])->name('DashLogin');
 Route::post('/logon',[LoginController::class,'login']);
 
 
-Route::middleware(['auth:user','checkUserStatus'])->group(function () {
+
+Route::middleware(['auth:user','user.check'])->group(function () {
     Route::get('/dashboard', function()
     {
         return view('components.dashboard');
     });
+
+    Route::post('/user-logout',[LoginController::class,'logout'])->name('user.logout');
     
 });
 

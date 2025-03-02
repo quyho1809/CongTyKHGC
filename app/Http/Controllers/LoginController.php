@@ -16,26 +16,52 @@ class LoginController extends Controller
 
     public function login(Request $CheckUser)
     {
-        $user = User::where('email',$CheckUser->email)->first();
+        $checkLogin = Auth::guard('user')->attempt([
+            'email' => $CheckUser->email,
+            'password' => $CheckUser->password
+        ]);
 
-        if ($user->status == 0)
+        if($checkLogin)
         {
-            return redirect()->route('login')->with('error', 'Tài khoản của bạn đang chờ phê duyệt.');
-        }
-        if ($user->status == 1)
-        {
-            return view('components.bloglist');
-        }
-        if ($user->status == 3) 
-        {
-            return redirect()->route('login')->with('error', 'Tài khoản của bạn đã bị khóa.');
-        }
+            $user = Auth::guard('user')->user();
 
-        return view('components.dashboard');
+            if ($user->status == 0)
+            {
+                Auth::guard('user')->logout();
+                return redirect()->route('login')->with('error', 'Tài khoản của bạn đang chờ phê duyệt.');
+            }
+            
+            if ($user->status == 1)
+            {
+                return view('components.dashboard')->with('success','Dang nhap thanh cong');
+            }
+            if ($user->status == 2) 
+            {
+                Auth::guard('user')->logout();
+                return redirect()->route('login')->with('error', 'Tài khoản của bạn đã bị tu choi.');
+            }
+
+            if ($user->status == 3) 
+            {
+                Auth::guard('user')->logout();
+                return redirect()->route('login')->with('error', 'Tài khoản của bạn đã bị khóa.');
+            }
+
+        }
+        
+        return redirect()->route('login')->with('error','Sai tai khoan hoac mat khau');
+
 
         
     }
 
+
+    public function logout()
+    {
+        Auth::guard('user')->logout();
+
+        return redirect()->route('login')->with('success','Dang xuat thanh cong');
+    }
     
 }
 

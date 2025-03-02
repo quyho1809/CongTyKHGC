@@ -12,8 +12,7 @@ class CheckUserStatus
     
     public function handle(Request $request, Closure $next)
     {
-        dd('asd') ;
-        $user = Auth::user();
+        $user = Auth::guard('user')->user();
         if ($user->status == 0)
         {
             return back()->with('error', 'Tài khoản của bạn đang chờ phê duyệt.');

@@ -10,41 +10,65 @@ use App\Http\Requests\UserRequest;
 use App\Jobs\SendWelcomeEmail;
 use App\Notifications\ResetPasswordNotification;
 
+
+
+namespace App\Http\Controllers;
+
+use Illuminate\Http\Request;
+use App\Models\User;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
+use App\Http\Requests\UserRequest;
+use App\Jobs\SendWelcomeEmail;
+
 class UserController extends Controller
 {
-    public function Home()
+   
+    public function home()
     {
         $user = User::find(1);
+        if (!$user) {
+            return view('components.index')->with('error', 'User không tồn tại.');
+        }
         return view('components.index', compact('user'));
-    } 
-    
-    public function Showlogin()
+    }
+
+   
+    public function showLogin()
     {
         return view('components.login');
     }
-    public function ShowSignUp()
+
+   
+    public function showSignUp()
     {
         return view('components.signup');
     }
 
-    public function Signup(UserRequest $request)
-{
-    
-    $user = User::create([
-        'first_name' => $request->first_name,
-        'last_name'  => $request->last_name,
-        'email'      => $request->email,
-        'password'   => bcrypt($request->password)
-    ]);
 
-   
-    if ($user) {
-        dispatch(new SendWelcomeEmail($user));
-        return redirect()->route('login')->with('success', 'Đăng ký thành công! Hãy kiểm tra email của bạn.');
-      
+    public function signup(UserRequest $request)
+    {
+        try {
+            $user = User::create([
+                'first_name' => $request->first_name,
+                'last_name'  => $request->last_name,
+                'email'      => $request->email,
+                'password'   => Hash::make($request->password),
+            ]);
+
+            dispatch(new SendWelcomeEmail($user));
+
+            return redirect()->route('login')->with('success', 'Đăng ký thành công! Hãy kiểm tra email của bạn.');
+        } catch (\Exception $e) {
+            return back()->with('error', 'Có lỗi xảy ra: ' . $e->getMessage());
+        }
     }
-
-    return back()->with('error', 'Đăng ký thất bại, vui lòng thử lại.');
+    protected $routeMiddleware = [
+        // Middleware có sẵn
+        'auth' => \App\Http\Middleware\Authenticate::class,
+    
+        // Middleware mới
+        'own.profile' => \App\Http\Middleware\EnsureUserOwnsProfile::class,
+    ];
 }
 
-}

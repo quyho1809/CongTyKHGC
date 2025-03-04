@@ -24,15 +24,12 @@
                 <ul class="nav">
                     <li class="nav-item"><a href="/" class="nav-link text-white">Home</a></li>
                     <li class="nav-item"><a href="/dashboard" class="nav-link text-white">Dashboard</a></li>
-                    <li class="nav-item"><a href="/logon" class="nav-link text-white">Log on</a></li>
+                    <li class="nav-item"><a href="/logon" class="nav-link text-white">Log in</a></li>
                     <li class="nav-item"><a href="/sign-up" class="nav-link text-white">Sign up</a></li>
                     <li class="nav-item"><a href="" class="nav-link text-white">Liên Hệ</a></li>
                 </ul>
 
-                <form action="{{ route('user.logout') }}" method="post">
-                    @csrf
-                    <button class="btn btn-danger" type="submit">Log out</button>
-                </form>
+               
             </nav>
         </div>
     </header>

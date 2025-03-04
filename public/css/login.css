@@ -1,0 +1,47 @@
+/* Tổng quan */
+body {
+    background-color: #f8f9fa;
+}
+
+/* Header */
+.header {
+    background-color: #212529;
+    padding: 15px 0;
+}
+.header .logo {
+    font-size: 20px;
+    font-weight: bold;
+    color: white;
+    text-decoration: none;
+}
+.header .nav ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+}
+.header .nav ul li {
+    margin-left: 15px;
+}
+.header .nav ul li a {
+    color: white;
+    text-decoration: none;
+    font-size: 16px;
+}
+
+/* Form */
+.form-container {
+    background: white;
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+    width: 400px;
+}
+
+/* Footer */
+.footer {
+    background-color: #212529;
+    color: white;
+    padding: 15px 0;
+    margin-top: auto;
+}

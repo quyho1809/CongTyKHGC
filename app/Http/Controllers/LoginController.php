@@ -13,48 +13,40 @@ class LoginController extends Controller
     {
         return view('components.login');
     }
-
     public function login(Request $CheckUser)
     {
-        $checkLogin = Auth::guard('user')->attempt([
-            'email' => $CheckUser->email,
-            'password' => $CheckUser->password
+        $credentials = $CheckUser->validate([
+            'email' => 'required|email',
+            'password' => 'required'
         ]);
-
-        if($checkLogin)
-        {
-            $user = Auth::guard('user')->user();
-
-            if ($user->status == 0)
-            {
-                Auth::guard('user')->logout();
+    
+        if (Auth::attempt($credentials)) {
+            $CheckUser->session()->regenerate();
+            $user = Auth::user();
+    
+            if ($user->status == 0) {
+                Auth::logout();
                 return redirect()->route('login')->with('error', 'Tài khoản của bạn đang chờ phê duyệt.');
             }
-            
-            if ($user->status == 1)
-            {
-                return view('components.dashboard')->with('success','Dang nhap thanh cong');
+    
+            if ($user->status == 1) {
+                return redirect()->route('dashboard')->with('success', 'Đăng nhập thành công!');
             }
-            if ($user->status == 2) 
-            {
-                Auth::guard('user')->logout();
-                return redirect()->route('login')->with('error', 'Tài khoản của bạn đã bị tu choi.');
+    
+            if ($user->status == 2) {
+                Auth::logout();
+                return redirect()->route('login')->with('error', 'Tài khoản của bạn đã bị từ chối.');
             }
-
-            if ($user->status == 3) 
-            {
-                Auth::guard('user')->logout();
+    
+            if ($user->status == 3) {
+                Auth::logout();
                 return redirect()->route('login')->with('error', 'Tài khoản của bạn đã bị khóa.');
             }
-
         }
-        
-        return redirect()->route('login')->with('error','Sai tai khoan hoac mat khau');
-
-
-        
+    
+        return back()->with('error', 'Sai tài khoản hoặc mật khẩu');
     }
-
+    
 
     public function logout()
     {

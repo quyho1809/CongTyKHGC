@@ -7,6 +7,8 @@ use App\Models\User;
 use App\Mail\WelcomeMail;
 use Illuminate\Support\Facades\Mail;
 use App\Http\Requests\UserRequest;
+use App\Jobs\SendWelcomeEmail;
+use App\Notifications\ResetPasswordNotification;
 
 class UserController extends Controller
 {
@@ -37,9 +39,9 @@ class UserController extends Controller
 
    
     if ($user) {
-        Mail::to($user->email)->send(new WelcomeMail($user));
-        return view('components.login')->with('success', 'Đăng ký thành công! Hãy kiểm tra email của bạn.');
-
+        dispatch(new SendWelcomeEmail($user));
+        return redirect()->route('login')->with('success', 'Đăng ký thành công! Hãy kiểm tra email của bạn.');
+      
     }
 
     return back()->with('error', 'Đăng ký thất bại, vui lòng thử lại.');

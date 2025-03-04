@@ -49,7 +49,7 @@
                 @enderror
             </div>
 
-            <button type="submit" class="btn btn-success">Send</button>
+            <button type="submit" class="btn btn-success">register</button>
         </form>
 
     </div>

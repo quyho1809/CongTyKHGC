@@ -8,5 +8,8 @@
 <body>
     <p>Chào {{ $user->first_name }} {{ $user->last_name }},</p>
     <p>Cảm ơn bạn đã đăng ký.</p>
+
+
+    
 </body>
 </html>

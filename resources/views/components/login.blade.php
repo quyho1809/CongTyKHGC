@@ -14,6 +14,9 @@
  
     
     <button type="submit">Log in</button>
+    
+    <a href="{{ route('password.request') }}">Forget Password</a>
+
    
     @if(session('error'))
     <div class="alert alert-danger">
@@ -25,7 +28,10 @@
     <div class="alert alert-success">
         {{ session('success') }}
     </div>
+    
     @endif
+  
+
 </form>
 
 

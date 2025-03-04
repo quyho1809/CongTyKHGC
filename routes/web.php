@@ -10,6 +10,9 @@ use App\Http\Controllers\Middleware\CheckUserStatus;
 
 use App\Http\Controllers\LoginController;
 
+use App\Http\Controllers\ForgotPasswordController;
+
+use App\Http\Controllers\PasswordResetController;
 
 Route::get('/',[UserController::class,'Home']);
 
@@ -21,9 +24,18 @@ Route::get('/logon',[UserController::class,'Showlogin'])->name('DashLogin');
 
 Route::post('/logon',[LoginController::class,'login']);
 
+Route::get('/forgot-password', [PasswordResetController::class, 'showLinkRequestForm'])->name('password.request');
+
+Route::post('/forgot-password', [PasswordResetController::class, 'sendResetLink']);
+
+Route::middleware(['web'])->group(function () {
+    Route::get('/reset-password/{token}', [PasswordResetController::class, 'showResetForm'])->name('password.reset');
+    Route::post('/reset-password', [PasswordResetController::class, 'reset'])->name('password.update');
+});
 
 
-Route::middleware(['auth:user','user.check'])->group(function () {
+Route::middleware(['auth:user','user.check'])->group(function ()
+ {
     Route::get('/dashboard', function()
     {
         return view('components.dashboard');

@@ -77,6 +77,9 @@ return [
     | set to any locale for which you plan to have translation strings.
     |
     */
+    //Dang ky Fortify Service Provider
+    App\Providers\FortifyServiceProvider::class,
+
 
     'locale' => env('APP_LOCALE', 'en'),
 

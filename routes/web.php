@@ -10,7 +10,7 @@ use App\Http\Middleware\EnsureUserOwnsProfile;
 use App\Models\User; 
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\PostController;
-use Auth;
+
 
 
 Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
@@ -75,6 +75,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/your-post', [PostController::class, 'yourPost'])->name('your.post');
     Route::get('/create-your-post', [PostController::class, 'showCreatePost'])->name('show.create.post');
     Route::post('/create-your-post', [PostController::class, 'createPost'])->name('create.post');
+
 });
 
 

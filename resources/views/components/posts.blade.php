@@ -14,14 +14,16 @@
             </tr>
         </thead>
         <tbody>
-            @foreach($posts as $post)
-                <tr>
-                    <td>{{ $post->title }}</td>
-                    <td>{{ $post->description }}</td>
-                    <td>{{ $post->publish_date }}</td>
-                    <td>{{ $post->status == 1 ? 'Đã cập nhật' : 'Bài mới' }}</td>
-                </tr>
-            @endforeach
+         @foreach($posts as $post)
+         <tr>
+             <td>{{ $post->title }}</td>
+             <td>{{ $post->description }}</td>
+             <td>{{ $post->publish_date }}</td>
+             <td>{{ $post->status == 1 ? 'Đã cập nhật' : 'Chờ duyệt' }}</td>
+             <td><img src="{{ $post->thumbnail }}" alt="Thumbnail" width="150"></td>
+         </tr>
+     @endforeach
+     
         </tbody>
     </table>
 

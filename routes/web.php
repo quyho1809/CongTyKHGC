@@ -8,53 +8,74 @@ use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Mail;
 use App\Http\Middleware\EnsureUserOwnsProfile;
 use App\Models\User; 
+use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\PostController;
+use Auth;
+
+
+Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+Auth::routes();
+
+
+Route::get('/shop/logout', [LoginController::class, 'userLogout'])->name('shop.logout');
 
 
 /* Trang chủ */
-Route::get('/', [UserController::class, 'Home']);
+Route::get('/', [UserController::class, 'Home'])->name('shop.home');
 
 /* Đăng ký */
 Route::get('/sign-up', [UserController::class, 'ShowSignUp'])->name('register');
 Route::post('/sign-up', [UserController::class, 'signup'])->name('register.submit');
 
 /* Đăng nhập */
-Route::get('/login', [LoginController::class, 'ShowLogin'])->name('login');
-Route::post('/login', [LoginController::class, 'login'])->name('login.submit');
+Route::get('/login', [LoginController::class, 'ShowLogin'])->name('showlogin');
+Route::post('/login', [LoginController::class, 'login'])->name('login');
 Route::get('/logon', function () {
     return redirect()->route('login');
 });
 
-Route::get('/logout', [LoginController::class, 'logout'])->name('logout');
 
 
 /* Quên mật khẩu */
 Route::get('/forgot-password', [PasswordResetController::class, 'showLinkRequestForm'])->name('password.request');
-Route::post('/forgot-password', [PasswordResetController::class, 'sendResetLink']);
+Route::post('/forgot-password', [PasswordResetController::class, 'sendResetLink'])->name('password.email');;
+
 Route::get('/reset-password/{token}', [PasswordResetController::class, 'showResetForm'])->name('password.reset');
 Route::post('/reset-password', [PasswordResetController::class, 'reset'])->name('password.update');
 
 /* Khu vực chỉ dành cho người dùng đã đăng nhập */
 Route::middleware(['auth'])->group(function () {
     Route::get('/dashboard', function () {
-        return view('components.dashboard');
+        return view('admin.dashboard');
     })->name('dashboard');
 });
-    Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 
     /* Hồ sơ người dùng */
-    Route::middleware(['auth'])->group(function () {
+    Route::middleware(['user.check'])->group(function () {
+
         Route::get('/profile/{user}/edit', [ProfileController::class, 'edit'])
-            ->middleware(EnsureUserOwnsProfile::class)
             ->name('profile.edit');
     
         Route::put('/profile/{user}', [ProfileController::class, 'update'])
-            ->middleware(EnsureUserOwnsProfile::class)
             ->name('profile.update');
+
+
     });
+    
 /* Gửi email test */
 Route::get('/mail', function () {
     Mail::raw('Cảm ơn bạn đã đăng nhập!', function ($message) {
         $message->to('email@example.com', 'User Name')->subject('Thông báo đăng nhập');
     });
     return 'Email đã gửi thành công!';
+
 });
+
+Route::middleware(['auth'])->group(function () {
+    Route::get('/your-post', [PostController::class, 'yourPost'])->name('your.post');
+    Route::get('/create-your-post', [PostController::class, 'showCreatePost'])->name('show.create.post');
+    Route::post('/create-your-post', [PostController::class, 'createPost'])->name('create.post');
+});
+
+
+Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');

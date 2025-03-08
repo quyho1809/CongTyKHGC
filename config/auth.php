@@ -41,7 +41,7 @@ return [
             'provider' => 'users',
         ],
         
-        'user'=>[
+        'users'=>[
             'driver' => 'session',
             'provider' => 'users',
         ]
@@ -67,8 +67,7 @@ return [
     'providers' => [
         'users' => [
             'driver' => 'eloquent',
-            'model' => App\Models\User::class,
-            App\Providers\FortifyServiceProvider::class,
+            'model' => App\Models\User::class
             
         ],
 

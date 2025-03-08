@@ -6,6 +6,7 @@ use Illuminate\Support\ServiceProvider;
 use Laravel\Fortify\Fortify; 
 use Laravel\Fortify\Contracts\ResetsUserPasswords;
 use App\Actions\Fortify\ResetUserPassword;
+use App\Jobs\SendResetPasswordEmail;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -17,8 +18,6 @@ class AppServiceProvider extends ServiceProvider
 
     public function boot(): void
     {
-        Fortify::resetPasswordView(function () {
-            return view('components.reset-password');
-        });
+        app()->bind(SendResetPasswordEmail::class);
     }
 }

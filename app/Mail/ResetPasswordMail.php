@@ -16,37 +16,29 @@ class ResetPasswordMail extends Mailable
     public $email;
     public $token;
 
-    public function __construct($email,$token)
+    public function __construct($email, $token)
     {
         $this->email = $email;
         $this->token = $token;
     }
 
-   
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Reset Password Mail',
+            subject: 'Đặt lại mật khẩu của bạn',
         );
     }
 
-    
     public function content(): Content
     {
         return new Content(
-            view: 'view.name',
+            view: 'emails.templatemail',
+            with: [
+                'resetLink' => url('/reset-password/' . $this->token),
+                'email' => $this->email,
+            ],
         );
     }
-
-    public function attachments(): array
-    {
-        return [];
-    }
-
-    public function build()
-    {
-        return $this->subject('Reset Password')
-                    ->view('emails.templatemail')
-                    ->with(['token' => $this->token]);
-    }
 }
+
+

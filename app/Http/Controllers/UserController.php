@@ -9,17 +9,8 @@ use Illuminate\Support\Facades\Mail;
 use App\Http\Requests\UserRequest;
 use App\Jobs\SendWelcomeEmail;
 use App\Notifications\ResetPasswordNotification;
-
-
-
-namespace App\Http\Controllers;
-
-use Illuminate\Http\Request;
-use App\Models\User;
+use Auth;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Mail;
-use App\Http\Requests\UserRequest;
-use App\Jobs\SendWelcomeEmail;
 
 class UserController extends Controller
 {
@@ -63,12 +54,6 @@ class UserController extends Controller
             return back()->with('error', 'Có lỗi xảy ra: ' . $e->getMessage());
         }
     }
-    protected $routeMiddleware = [
-        // Middleware có sẵn
-        'auth' => \App\Http\Middleware\Authenticate::class,
     
-        // Middleware mới
-        'own.profile' => \App\Http\Middleware\EnsureUserOwnsProfile::class,
-    ];
 }
 

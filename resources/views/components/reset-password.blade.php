@@ -38,8 +38,9 @@
                 <input type="hidden" name="token" value="{{ request()->route('token') }}">
                 
                 <div class="form-group">
-                    <label for="email">Email Address</label>
-                    <input type="email" name="email" value="{{ old('email') }}" required>
+                    
+                    <input type="hidden" name="email" value="{{ old('email', $email) }}" readonly>
+
                     @error('email')
                         <p class="error">{{ $message }}</p>
                     @enderror

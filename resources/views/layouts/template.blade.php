@@ -11,6 +11,9 @@
 
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.css" rel="stylesheet">
+
     @yield('css')
 </head>
 
@@ -23,13 +26,30 @@
                 <a href="/" class="text-white text-decoration-none fs-4">LOGO</a>
                 <ul class="nav">
                     <li class="nav-item"><a href="/" class="nav-link text-white">Home</a></li>
+
+ 
+
+                    @auth
                     <li class="nav-item"><a href="/dashboard" class="nav-link text-white">Dashboard</a></li>
-                    <li class="nav-item"><a href="/logon" class="nav-link text-white">Log in</a></li>
-                    <li class="nav-item"><a href="/sign-up" class="nav-link text-white">Sign up</a></li>
-                    <li class="nav-item"><a href="" class="nav-link text-white">Liên Hệ</a></li>
+
+                        <li class="nav-item"><a href="/your-post" class="nav-link text-white">Your Post</a></li>
+
+                        <li class="nav-item">
+                            <a href="{{ route('shop.logout') }}" class="nav-link text-white">Log Out</a>
+                        </li>
+                    @endauth
+
+                    @guest
+                        <li class="nav-item"><a href="/logon" class="nav-link text-white">Log in</a></li>
+                        <li class="nav-item"><a href="/sign-up" class="nav-link text-white">Sign up</a></li>
+
+
+                    @endguest
+
+
                 </ul>
 
-               
+
             </nav>
         </div>
     </header>
@@ -46,6 +66,7 @@
 
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
 </body>
 
 </html>

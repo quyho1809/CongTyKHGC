@@ -9,9 +9,11 @@ use App\Models\User;
 
 class LoginController extends Controller
 {
+    protected $redirectTo = '/dashboard'; // Điều hướng sau khi đăng nhập thành công
+
     public function ShowLogin()
     {
-        return view('components.login');
+        return view('auth.login');
     }
     public function login(Request $CheckUser)
     {
@@ -21,7 +23,7 @@ class LoginController extends Controller
         ]);
     
         if (Auth::attempt($credentials)) {
-            $CheckUser->session()->regenerate();
+
             $user = Auth::user();
     
             if ($user->status == 0) {
@@ -43,17 +45,15 @@ class LoginController extends Controller
                 return redirect()->route('login')->with('error', 'Tài khoản của bạn đã bị khóa.');
             }
         }
+        // dd('sadsads');
     
         return back()->with('error', 'Sai tài khoản hoặc mật khẩu');
     }
     
-
-    public function logout()
+    public function userLogout()    
     {
-        Auth::guard('user')->logout();
-
-        return redirect()->route('login')->with('success','Dang xuat thanh cong');
+        Auth::logout();
+        return redirect()->route('shop.home');
     }
-    
 }
 

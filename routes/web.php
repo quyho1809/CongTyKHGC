@@ -77,6 +77,19 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/create-your-post', [PostController::class, 'createPost'])->name('create.post');
 
 });
+Route::middleware(['auth'])->group(function () {
+    Route::delete('/posts/delete', [PostController::class, 'destroy'])->name('posts.destroy');
+    Route::delete('/posts/delete-all', [PostController::class, 'destroyAll'])->name('posts.destroy.all');
+});
+Route::middleware(['auth'])->group(function () {
+    Route::get('/your-post', [PostController::class, 'yourPost'])->name('your.post');
+    Route::get('/posts/{id}/edit', [PostController::class, 'edit'])->name('posts.edit');
+    Route::get('/posts/{id}', [PostController::class, 'show'])->name('posts.show');
+    Route::put('/posts/{id}', [PostController::class, 'update'])->name('posts.update');
+    Route::delete('/posts/{id}', [PostController::class, 'destroy'])->name('posts.destroy');
+
+});
+
 
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');

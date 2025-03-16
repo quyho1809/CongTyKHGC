@@ -14,7 +14,7 @@
 
     <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.css" rel="stylesheet">
 
-    @yield('css')
+    
 </head>
 
 <body>
@@ -32,7 +32,10 @@
                     @auth
                     <li class="nav-item"><a href="/dashboard" class="nav-link text-white">Dashboard</a></li>
 
-                        <li class="nav-item"><a href="/your-post" class="nav-link text-white">Your Post</a></li>
+                        <li class="nav-item"><a href="/your-post" class="nav-link text-white">Post</a></li>
+
+                        <li class="nav-item"><a href=" " class="nav-link text-white">My Profile</a></li>
+
 
                         <li class="nav-item">
                             <a href="{{ route('shop.logout') }}" class="nav-link text-white">Log Out</a>

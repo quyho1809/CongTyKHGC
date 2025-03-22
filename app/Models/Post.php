@@ -15,19 +15,34 @@ class Post extends Model implements HasMedia
 
     protected $fillable = ['user_id', 'title', 'slug', 'description', 'content', 'publish_date', 'status'];
     protected $dates = ['deleted_at'];
-
+    public function registerMediaCollections(): void
+    {
+        $this->addMediaCollection('thumbnails')->singleFile(); 
+    }
     public static function boot()
     {
         parent::boot();
+
         static::creating(function ($post) {
             $post->slug = Str::slug($post->title);
         });
-    }
 
+        static::created(function ($post) {
+            $post->slug = Str::slug($post->title) . '-' . $post->id;
+            $post->save();  
+        });
+    }
+    public function getRouteKeyName()
+    {
+        return 'slug'; 
+    }
     
     public function getThumbnailAttribute()
     {
-        return $this->getFirstMediaUrl('thumbnails') ?: asset('default-thumbnail.jpg');
+        
+        return $this->attributes['thumbnail'] 
+        ? asset('image/' . $this->attributes['thumbnail']) 
+        : asset('image/hinh_1.jpg');
     }
     protected $attributes = [
         'description' => null,

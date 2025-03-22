@@ -38,23 +38,28 @@
                     <td>{{ $post->title }}</td>
                     <td>{{ $post->description }}</td>
                     <td>{{ $post->publish_date }}</td>
-                    <td>{{ $post->status == 1 ? 'Đã cập nhật' : 'Chờ duyệt' }}</td>
-                    <td><img src="{{ $post->thumbnail }}" alt="Thumbnail" width="100"></td>
+                    <td>{{ $post->status == 1 ? 'Đã cập nhật' : 'Chờ duyệt' }}</td> 
                     <td>
-                        <!-- Nút Edit -->
-                        <a href="{{ route('posts.edit', $post->id) }}" class="btn btn-warning btn-sm">
-                            <i class="fa fa-edit"></i>
-                        </a>
-
-                        <!-- Nút Show -->
-                        <a href="{{ route('posts.show', $post->id) }}" class="btn btn-info btn-sm">
+                        @if($post->thumbnail)
+                            <img src="{{ asset($post->thumbnail) }}" alt="Thumbnail" width="100">
+                        @endif
+                    </td>
+                    <td>
+                        <a href="{{ route('posts.show', $post->slug) }}" class="btn btn-info btn-sm">
                             <i class="fa fa-eye"></i>
                         </a>
-
-                        <!-- Nút Delete -->
-                        <button class="btn btn-danger btn-sm btn-delete" data-id="{{ $post->id }}" data-bs-toggle="modal" data-bs-target="#deleteModal">
-                            <i class="fa fa-trash"></i>
-                        </button>
+                    
+                        <a href="{{ route('posts.edit', $post->slug) }}" class="btn btn-warning btn-sm">
+                            <i class="fa fa-edit"></i>
+                        </a>
+                    
+                        <form action="{{ route('posts.destroy', $post->slug) }}" method="POST" class="d-inline">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Bạn có chắc muốn xóa bài viết này?')">
+                                <i class="fa fa-trash"></i>
+                            </button>
+                        </form>
                     </td>
                 </tr>
             @endforeach
@@ -63,42 +68,4 @@
 
     {{ $posts->links() }}
 
-    <!-- Modal Xóa Bài Viết -->
-    <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="deleteModalLabel">Xác nhận xóa</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                </div>
-                <div class="modal-body">
-                    Bạn có chắc chắn muốn xóa bài viết này không?
-                </div>
-                <div class="modal-footer">
-                    <form id="deleteForm" method="POST">
-                        @csrf
-                        @method('DELETE')
-                        <button type="submit" class="btn btn-danger">Xóa</button>
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
-@endsection
-
-@section('scripts')
-<script>
-    document.addEventListener("DOMContentLoaded", function () {
-        let deleteModal = document.getElementById("deleteModal");
-        let deleteForm = document.getElementById("deleteForm");
-
-        document.querySelectorAll(".btn-delete").forEach(button => {
-            button.addEventListener("click", function () {
-                let postId = this.getAttribute("data-id");
-                deleteForm.action = `/posts/${postId}`; // Cập nhật action của form
-            });
-        });
-    });
-</script>
 @endsection

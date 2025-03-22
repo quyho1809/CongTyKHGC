@@ -35,9 +35,6 @@
         </form>
     </div>
 
-    <script>
-        document.addEventListener("DOMContentLoaded", function () {
-            // Tích hợp editor nếu cần
-        });
-    </script>
-@endsection
+
+    
+    @endsection

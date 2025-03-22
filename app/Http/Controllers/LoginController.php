@@ -50,10 +50,13 @@ class LoginController extends Controller
         return back()->with('error', 'Sai tài khoản hoặc mật khẩu');
     }
     
-    public function userLogout()    
+    public function logout(Request $request)
     {
-        Auth::logout();
-        return redirect()->route('shop.home');
+        Auth::logout(); 
+        $request->session()->invalidate(); 
+        $request->session()->regenerateToken(); 
+
+        return redirect('/login')->with('message', 'Đăng xuất thành công!');
     }
 }
 

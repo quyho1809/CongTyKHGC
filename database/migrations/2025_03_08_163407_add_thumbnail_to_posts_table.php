@@ -12,6 +12,9 @@ return new class extends Migration
     Schema::table('posts', function (Blueprint $table) {
         $table->string('thumbnail')->nullable()->after('status');
     });
+    Schema::table('posts', function (Blueprint $table) {
+        $table->tinyInteger('status')->default(0); 
+    });
 }
 
 public function down()

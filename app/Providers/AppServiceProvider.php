@@ -20,4 +20,9 @@ class AppServiceProvider extends ServiceProvider
     {
         app()->bind(SendResetPasswordEmail::class);
     }
+    protected $policies = [
+        Post::class => PostPolicy::class,
+    ];
+   
+    
 }

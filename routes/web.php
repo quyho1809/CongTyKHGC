@@ -10,16 +10,16 @@ use App\Http\Middleware\EnsureUserOwnsProfile;
 use App\Models\User; 
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\PostController;
-
+use App\Http\Controllers\NewsController;
+use App\Http\Controllers\Admin\AdminController;
+use App\Http\Controllers\Admin\PageController;
 
 
 Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 Auth::routes();
 
 
-Route::get('/shop/logout', [LoginController::class, 'userLogout'])->name('shop.logout');
-
-
+Route::post('/shop/logout', [LoginController::class, 'logout'])->name('shop.logout');
 /* Trang chủ */
 Route::get('/', [UserController::class, 'Home'])->name('shop.home');
 
@@ -82,14 +82,20 @@ Route::middleware(['auth'])->group(function () {
     Route::delete('/posts/delete-all', [PostController::class, 'destroyAll'])->name('posts.destroy.all');
 });
 Route::middleware(['auth'])->group(function () {
-    Route::get('/your-post', [PostController::class, 'yourPost'])->name('your.post');
-    Route::get('/posts/{id}/edit', [PostController::class, 'edit'])->name('posts.edit');
-    Route::get('/posts/{id}', [PostController::class, 'show'])->name('posts.show');
-    Route::put('/posts/{id}', [PostController::class, 'update'])->name('posts.update');
-    Route::delete('/posts/{id}', [PostController::class, 'destroy'])->name('posts.destroy');
-
+    Route::get('/posts/{post:slug}/edit', [PostController::class, 'edit'])->name('posts.edit');
+    Route::get('/posts/{post}', [PostController::class, 'show'])->name('posts.show'); 
+    Route::put('/posts/{post:slug}', [PostController::class, 'update'])->name('posts.update');
+    Route::delete('/posts/{post:slug}', [PostController::class, 'destroy'])->name('posts.destroy');
 });
+Route::get('/news', [NewsController::class, 'index'])->name('news.index');
+Route::get('/news/{slug}', [NewsController::class, 'show'])->name('news.show');
 
+Route::middleware(['auth', 'admin'])->group(function () {
+    Route::get('/admin', [AdminController::class, 'index'])->name('admin.dashboard');
+});
+Route::middleware(['auth', 'admin'])->group(function () {
+    Route::get('/admin/pages', [PageController::class, 'index'])->name('admin.pages.index');
+});
 
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');

@@ -13,11 +13,11 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="{{ route('posts.index') }}" class="nav-link">
-                        <i class="nav-icon fas fa-newspaper"></i>
-                        <p>Quản lý bài viết</p>
+                    <a href="{{ route('admin.posts.index') }}" class="nav-link">
+                        <i class="fas fa-file-alt"></i> Quản lý bài viết
                     </a>
                 </li>
+                
             </ul>
         </nav>
     </div>

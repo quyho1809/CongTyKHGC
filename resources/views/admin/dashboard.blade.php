@@ -1,12 +1,11 @@
-@extends('layouts.template')
+@extends('adminlte::page')
 
-@section('title', 'Dashboard')
+@section('title', 'Admin Dashboard')
+
+@section('content_header')
+    <h1>Dashboard Admin</h1>
+@stop
 
 @section('content')
-
-    <div class="card">
-        <div class="card-body">
-            <h3>Chào mừng bạn đến với Admin Panel!</h3>
-        </div>
-    </div>
-@endsection
+    <p>Chào mừng bạn đến với trang quản trị.</p>
+@stop

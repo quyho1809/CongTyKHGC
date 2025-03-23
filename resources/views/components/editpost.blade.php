@@ -17,24 +17,40 @@
                 <textarea name="description" class="form-control">{{ old('description', $post->description) }}</textarea>
             </div>
 
-            <div class="mb-3">
-                <label for="content" class="form-label">Nội dung</label>
-                <textarea name="content" class="form-control" id="editor">{{ old('content', $post->content) }}</textarea>
-            </div>
+            <label for="content" class="content-label">Content</label>
+            <textarea name="content" class="form-control summernote"></textarea>
+            @error('content')
+                <span class="text-danger">{{ $message }}</span>
+            @enderror       
+            
+            <label for="thumbnail">Upload Thumbnail</label>
+            <input type="file" name="thumbnail" accept="image/*" class="form-control">
+            
+            @error('thumbnail')
+                <span class="text-danger">{{ $message }}</span>
+            @enderror
+            <img src="{{ $post->thumbnail }}" alt="">
 
-            <div class="mb-3">
-                <label for="status" class="form-label">Trạng thái</label>
-                <select name="status" class="form-control">
-                    <option value="0" {{ $post->status == 0 ? 'selected' : '' }}>Chờ duyệt</option>
-                    <option value="1" {{ $post->status == 1 ? 'selected' : '' }}>Đã cập nhật</option>
-                </select>
+            <div class="mt-4">
+                <button type="submit" class="btn btn-primary">Cập nhật</button>
+                <a href="{{ route('your.post') }}" class="btn btn-secondary">Hủy</a>
             </div>
-
-            <button type="submit" class="btn btn-primary">Cập nhật</button>
-            <a href="{{ route('your.post') }}" class="btn btn-secondary">Hủy</a>
         </form>
     </div>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-bs4.min.css">
+    
+   
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-bs4.min.js"></script>
 
+    <script>
+        $(document).ready(function() {
+            $('.summernote').summernote({
+                height: 300,  
+                placeholder: "Nhập nội dung bài viết...",
 
+            });
+        });
+    </script>
     
     @endsection

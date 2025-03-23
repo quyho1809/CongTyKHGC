@@ -4,16 +4,18 @@ namespace App\Http\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class AdminMiddleware
 {
-    public function handle(Request $request, Closure $next): Response
-    {
-        if (auth()->check() && auth()->user()->role === 'admin') {
-            return $next($request);
-        }
+    public function handle(Request $request, Closure $next)
+{   
+    $user = Auth::user();
 
-        abort(403, 'Bạn không có quyền truy cập.');
+    if (!$user || $user->role !== 'admin') {
+        return abort(403, 'Bạn không có quyền truy cập.');
     }
-}
 
+    return $next($request);
+}
+}

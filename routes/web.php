@@ -12,7 +12,10 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\NewsController;
 use App\Http\Controllers\Admin\AdminController;
-use App\Http\Controllers\Admin\PageController;
+
+
+use App\Http\Controllers\AdminUserController;
+
 
 
 Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
@@ -33,6 +36,13 @@ Route::post('/login', [LoginController::class, 'login'])->name('login');
 Route::get('/logon', function () {
     return redirect()->route('login');
 });
+Route::middleware(['auth'])->group(function () {
+    Route::get('/dashboard', [UserDashboardController::class, 'index'])->name('dashboard');
+});
+
+Route::middleware(['auth', 'admin'])->group(function () {
+    Route::get('/admin/dashboard', [AdminController::class, 'index'])->name('admin.dashboard');
+});
 
 
 
@@ -43,23 +53,21 @@ Route::post('/forgot-password', [PasswordResetController::class, 'sendResetLink'
 Route::get('/reset-password/{token}', [PasswordResetController::class, 'showResetForm'])->name('password.reset');
 Route::post('/reset-password', [PasswordResetController::class, 'reset'])->name('password.update');
 
-/* Khu vực chỉ dành cho người dùng đã đăng nhập */
 Route::middleware(['auth'])->group(function () {
     Route::get('/dashboard', function () {
-        return view('admin.dashboard');
+        return view('components.dashboard');
     })->name('dashboard');
+});
+Route::middleware([ 'admin'])->group(function () {
+    Route::get('/admin/dashboard', function () {
+        return view('admin.dashboard');
+    })->name('admin.dashboard');
 });
 
     /* Hồ sơ người dùng */
-    Route::middleware(['user.check'])->group(function () {
-
-        Route::get('/profile/{user}/edit', [ProfileController::class, 'edit'])
-            ->name('profile.edit');
-    
-        Route::put('/profile/{user}', [ProfileController::class, 'update'])
-            ->name('profile.update');
-
-
+    Route::middleware(['auth'])->group(function () {
+        Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+        Route::put('/profile', [ProfileController::class, 'update'])->name('profile.update');
     });
     
 /* Gửi email test */
@@ -77,8 +85,9 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/create-your-post', [PostController::class, 'createPost'])->name('create.post');
 
 });
+
 Route::middleware(['auth'])->group(function () {
-    Route::delete('/posts/delete', [PostController::class, 'destroy'])->name('posts.destroy');
+    Route::delete('/posts/{slug}', [PostController::class, 'destroy'])->name('posts.destroy');
     Route::delete('/posts/delete-all', [PostController::class, 'destroyAll'])->name('posts.destroy.all');
 });
 Route::middleware(['auth'])->group(function () {
@@ -90,12 +99,16 @@ Route::middleware(['auth'])->group(function () {
 Route::get('/news', [NewsController::class, 'index'])->name('news.index');
 Route::get('/news/{slug}', [NewsController::class, 'show'])->name('news.show');
 
-Route::middleware(['auth', 'admin'])->group(function () {
-    Route::get('/admin', [AdminController::class, 'index'])->name('admin.dashboard');
+Route::prefix('admin')->middleware('admin')->name('admin.')->group(function () {
+
+    Route::get('/', [AdminController::class, 'index'])->name('dashboard');
+    Route::delete('/admin/posts/{id}', [PostController::class, 'destroy'])->name('posts.destroy');
+
+    
 });
-Route::middleware(['auth', 'admin'])->group(function () {
-    Route::get('/admin/pages', [PageController::class, 'index'])->name('admin.pages.index');
-});
+Route::get('/admin/posts/edit/{id?}',[AdminController::class,'edit'])->name('admin.edit');
+
+Route::post('/admin/posts/edit/{id?}',[AdminController::class,'update'])->name('admin.edit');
 
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');

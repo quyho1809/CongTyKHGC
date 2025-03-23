@@ -44,19 +44,13 @@
     <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-bs4.min.js"></script>
 
-    <script>
-        $(document).ready(function() {
-            $('.summernote').summernote({
-                height: 300,  
-                placeholder: "Nhập nội dung bài viết...",
-                toolbar: [
-                    ['style', ['bold', 'italic', 'underline', 'clear']],
-                    ['font', ['fontsize', 'fontname']],
-                    ['para', ['ul', 'ol', 'paragraph']],
-                    ['insert', ['link', 'picture', 'video']],
-                    ['view', ['fullscreen', 'codeview']]
-                ]
+        <script>
+            $(document).ready(function() {
+                $('.summernote').summernote({
+                    height: 300,  
+                    placeholder: "Nhập nội dung bài viết...",
+
+                });
             });
-        });
-    </script>
+        </script>
 @endsection

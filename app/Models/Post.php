@@ -9,9 +9,10 @@ use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
+
 class Post extends Model implements HasMedia
 {
-    use HasFactory, InteractsWithMedia,SoftDeletes;
+    use HasFactory, InteractsWithMedia, SoftDeletes;
 
     protected $fillable = ['user_id', 'title', 'slug', 'description', 'content', 'publish_date', 'status'];
     protected $dates = ['deleted_at'];
@@ -39,10 +40,7 @@ class Post extends Model implements HasMedia
     
     public function getThumbnailAttribute()
     {
-        
-        return $this->attributes['thumbnail'] 
-        ? asset('image/' . $this->attributes['thumbnail']) 
-        : asset('image/hinh_1.jpg');
+        return $this->getFirstMediaUrl('thumbnails') ? $this->getFirstMediaUrl('thumbnails') : asset('image/hinh_1.jpg');
     }
     protected $attributes = [
         'description' => null,

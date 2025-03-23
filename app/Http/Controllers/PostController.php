@@ -11,49 +11,43 @@ use Illuminate\Support\Str;
 
 class PostController extends Controller
 {
-    // Hiển thị danh sách bài viết của user
+    
     public function yourPost()
     {
         $posts = Post::where('user_id', Auth::id())->latest()->paginate(10);
         return view('components.posts', compact('posts'));
     }
 
-    // Hiển thị form tạo bài viết
+  
     public function showCreatePost()
     {
         return view('components.createpost');
     }
 
-    // Xóa bài viết
-    public function destroy($id)
+    
+    public function destroy($slug)
     {
-        $post = Post::where('user_id', auth()->id())->findOrFail($id);
-
-        // Xóa ảnh nếu có
-        if ($post->thumbnail && file_exists(public_path($post->thumbnail))) {
-            unlink(public_path($post->thumbnail));
-        }
-
-        $post->delete();
-        return response()->json(['message' => 'Xóa bài viết thành công!']);
-    }
-
-    // Xóa tất cả bài viết
-    public function destroyAll()
-    {
-        $posts = auth()->user()->posts;
+        $post = Post::where('slug', $slug)->firstOrFail();
+        $post->delete(); // Soft delete
+    
+        return redirect()->back()->with('success', 'Xóa bài viết thành công!');
         
-        foreach ($posts as $post) {
-            if ($post->thumbnail && file_exists(public_path($post->thumbnail))) {
-                unlink(public_path($post->thumbnail));
-            }
-            $post->delete();
-        }
-
-        return redirect()->route('your.post')->with('success', 'Xóa tất cả bài viết thành công!');
+    }
+   
+public function destroyAll()
+{
+    $posts = auth()->user()->posts;
+    
+    foreach ($posts as $post) {
+        $post->clearMediaCollection('thumbnails');
+        $post->delete();
     }
 
-    // Tạo bài viết mới
+    return redirect()->route('your.post')->with('success', 'Xóa tất cả bài viết thành công!');
+}
+
+
+    
     public function createPost(CreatePostRequest $request)
     {
         $post = Post::create([
@@ -66,20 +60,16 @@ class PostController extends Controller
             'status'       => $request->status ?? 0,
         ]);
 
-        // Lưu ảnh vào thư mục public/uploads
+        
         if ($request->hasFile('thumbnail')) {
-            $file = $request->file('thumbnail');
-            $filename = 'uploads/' . time() . '_' . $file->getClientOriginalName();
-            $file->move(public_path('uploads'), $filename);
-
-            // Lưu đường dẫn ảnh vào database
-            $post->update(['thumbnail' => $filename]);
+            $post->addMedia($request->file('thumbnail'))
+                 ->toMediaCollection('thumbnails','media-library');
         }
 
         return redirect()->route('your.post')->with('success', 'Bài viết đã được tạo thành công!');
     }
 
-    // Hiển thị trang chỉnh sửa bài viết
+    
     public function edit(Post $post)
     {
         if (auth()->id() !== $post->user_id) {
@@ -89,7 +79,7 @@ class PostController extends Controller
         return view('components.editpost', compact('post'));
     }
 
-    // Xem bài viết
+    
     public function show(Post $post)
     {
         if (auth()->check() && auth()->id() !== $post->user_id) {
@@ -99,34 +89,28 @@ class PostController extends Controller
         return view('components.showpost', compact('post'));
     }
 
-    // Cập nhật bài viết
     public function update(Request $request, $id)
     {
         $post = Post::findOrFail($id);
-
+    
         if ($request->has('status') && auth()->user()->role !== 'admin') {
             return redirect()->route('your.post')->with('error', 'Bạn không có quyền thay đổi trạng thái bài viết!');
         }
-
-        // Xóa ảnh cũ và lưu ảnh mới nếu có
+    
+        
         if ($request->hasFile('thumbnail')) {
-            if ($post->thumbnail && file_exists(public_path($post->thumbnail))) {
-                unlink(public_path($post->thumbnail));
-            }
-
-            $file = $request->file('thumbnail');
-            $filename = 'uploads/' . time() . '_' . $file->getClientOriginalName();
-            $file->move(public_path('uploads'), $filename);
-
-            $post->update(['thumbnail' => $filename]);
+            $post->clearMediaCollection('thumbnails'); 
+            $post->addMediaFromRequest('thumbnail')
+                 ->toMediaCollection('thumbnails'); 
         }
-
+    
         if ($request->has('title')) {
             $request->merge(['slug' => Str::slug($request->title)]);
         }
-
+    
         $post->update($request->except(['status', 'thumbnail']));
-
+    
         return redirect()->route('your.post')->with('success', 'Cập nhật bài viết thành công');
     }
+    
 }

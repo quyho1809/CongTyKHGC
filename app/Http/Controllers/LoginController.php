@@ -2,61 +2,58 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Middleware\CheckUserStatus;
 use Illuminate\Http\Request;
-use Auth;
+use Illuminate\Support\Facades\Auth;
 use App\Models\User;
 
 class LoginController extends Controller
 {
-    protected $redirectTo = '/dashboard'; // Điều hướng sau khi đăng nhập thành công
-
     public function ShowLogin()
     {
         return view('auth.login');
     }
-    public function login(Request $CheckUser)
+
+    public function login(Request $request)
     {
-        $credentials = $CheckUser->validate([
+        $credentials = $request->validate([
             'email' => 'required|email',
             'password' => 'required'
         ]);
-    
-        if (Auth::attempt($credentials)) {
 
+        if (Auth::attempt($credentials)) {
             $user = Auth::user();
-    
+        
             if ($user->status == 0) {
                 Auth::logout();
                 return redirect()->route('login')->with('error', 'Tài khoản của bạn đang chờ phê duyệt.');
             }
-    
-            if ($user->status == 1) {
-                return redirect()->route('dashboard')->with('success', 'Đăng nhập thành công!');
-            }
-    
+        
             if ($user->status == 2) {
                 Auth::logout();
                 return redirect()->route('login')->with('error', 'Tài khoản của bạn đã bị từ chối.');
             }
-    
+        
             if ($user->status == 3) {
                 Auth::logout();
                 return redirect()->route('login')->with('error', 'Tài khoản của bạn đã bị khóa.');
             }
+        
+            if ($user->role === 'admin') {
+    return redirect()->route('admin.dashboard')->with('success', 'Đăng nhập thành công!');
+} elseif ($user->role === 'user') {
+    return redirect()->route('dashboard')->with('success', 'Đăng nhập thành công!');
+}
         }
-        // dd('sadsads');
-    
+
         return back()->with('error', 'Sai tài khoản hoặc mật khẩu');
     }
-    
+
     public function logout(Request $request)
     {
-        Auth::logout(); 
-        $request->session()->invalidate(); 
-        $request->session()->regenerateToken(); 
+        Auth::logout();
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
 
         return redirect('/login')->with('message', 'Đăng xuất thành công!');
     }
 }
-

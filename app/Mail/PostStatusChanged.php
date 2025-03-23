@@ -4,11 +4,10 @@ namespace App\Mail;
 
 use App\Models\Post;
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 
-class PostStatusChanged extends Mailable implements ShouldQueue
+class PostStatusMail extends Mailable
 {
     use Queueable, SerializesModels;
 
@@ -22,6 +21,6 @@ class PostStatusChanged extends Mailable implements ShouldQueue
     public function build()
     {
         return $this->subject("Bài viết: {$this->post->title} đã được cập nhật")
-                    ->view('emails.post_status_changed');
+                    ->view('emails.post_status');
     }
 }

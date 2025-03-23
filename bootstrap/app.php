@@ -13,13 +13,11 @@ return Application::configure(basePath: dirname(__DIR__))
     )
     ->withMiddleware(function (Middleware $middleware) {
         $middleware->alias([
-            'user.check' => CheckUserStatus::class,
-            
+                'admin' => \App\Http\Middleware\AdminMiddleware::class,
+                'user' => \App\Http\Middleware\CheckUserStatus::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {
         //
     })->create();
-    $app->routeMiddleware([
-        'admin' => App\Http\Middleware\IsAdmin::class,
-    ]);
+   

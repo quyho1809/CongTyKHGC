@@ -1,6 +1,6 @@
 @extends('layouts.template')
 
 @section('content')
-    <h2>Admin Dashboard</h2>
-    <p>Chào mừng bạn đến trang quản lý admin!</p>
+    <h2>Welcome</h2>
+    
 @endsection

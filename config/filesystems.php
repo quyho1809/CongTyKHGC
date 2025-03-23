@@ -40,10 +40,10 @@ return [
 
         
 
-        'public' => [
+        'media-library' => [
             'driver' => 'local',
-            'root' => public_path('image'),
-            'url' => env('APP_URL').'/image',
+            'root' => public_path('image/thumbnails'),
+            'url' => 'http://127.0.0.1:8000/image/thumbnails',
             'visibility' => 'public',
             'throw' => false,
             'report' => false,

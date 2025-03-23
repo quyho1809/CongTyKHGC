@@ -40,10 +40,8 @@
                     <td>{{ $post->publish_date }}</td>
                     <td>{{ $post->status == 1 ? 'Đã cập nhật' : 'Chờ duyệt' }}</td> 
                     <td>
-                        @if($post->thumbnail)
-                            <img src="{{ asset($post->thumbnail) }}" alt="Thumbnail" width="100">
-                        @endif
-                    </td>
+                            <img src="{{ $post->thumbnail}}" alt="Thumbnail" width="100">
+                    </td>       
                     <td>
                         <a href="{{ route('posts.show', $post->slug) }}" class="btn btn-info btn-sm">
                             <i class="fa fa-eye"></i>

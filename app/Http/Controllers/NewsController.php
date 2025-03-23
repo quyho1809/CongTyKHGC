@@ -18,12 +18,9 @@ class NewsController extends Controller
     }
 
     // Hiển thị chi tiết bài viết theo slug
-    public function show(Post $post)
-    {
-        if ($post->status !== 1) {
-            abort(404); // Nếu bài viết chưa được duyệt, báo lỗi 404
-        }
-
-        return view('news.show', compact('post'));
-    }
+    public function show($slug)
+{
+    $post = Post::where('slug', $slug)->where('status', 1)->firstOrFail();
+    return view('news.show', compact('post'));
+}
 }

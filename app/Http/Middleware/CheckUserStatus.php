@@ -13,6 +13,7 @@ class CheckUserStatus
     public function handle(Request $request, Closure $next)
     {
         //.
+        $user = Auth::user();
         if (Auth::guard('users')->check())
         {
             $user = Auth::guard('users')->user();
@@ -38,7 +39,11 @@ class CheckUserStatus
         }
         else 
              return redirect()->route('login')->with('error', 'Ban Can Phai Dang Nhap');
+        
 
+       
+
+            
 
      
         

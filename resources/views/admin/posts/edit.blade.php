@@ -6,7 +6,7 @@
     <div class="container">
         <h2 class="my-3">Chỉnh sửa bài viết</h2>
 
-    <a href="/admin">Quay lai</a>
+    <a href="/admin/index">Quay lai</a>
 
         @if(session('success'))
             <div class="alert alert-success">{{ session('success') }}</div>

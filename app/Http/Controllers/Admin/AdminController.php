@@ -5,7 +5,9 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Post;
-
+use App\Models\User;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Session;
 
 class AdminController extends Controller
 {
@@ -49,5 +51,21 @@ class AdminController extends Controller
     $post->delete(); 
 
     return back()->with('success', 'Xóa bài viết thành công!');
+}
+
+
+public function updateStatus(Request $request, $id)
+{
+    $user = User::findOrFail($id);
+    $user->status = $request->status;
+    $user->save();
+
+    if ($user->status == 0 && Auth::id() == $user->id) {
+        Auth::logout();
+        Session::flush();
+        return redirect()->route('login')->with('error', 'Tài khoản của bạn đã bị vô hiệu hóa.');
+    }
+
+    return back()->with('success', 'Cập nhật trạng thái thành công!');
 }
 }

@@ -12,9 +12,9 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\NewsController;
 use App\Http\Controllers\Admin\AdminController;
+use App\Http\Controllers\Admin\AdminUserController;
 
 
-use App\Http\Controllers\AdminUserController;
 
 
 
@@ -36,8 +36,9 @@ Route::post('/login', [LoginController::class, 'login'])->name('login');
 Route::get('/logon', function () {
     return redirect()->route('login');
 });
-Route::middleware(['auth'])->group(function () {
-    Route::get('/dashboard', [UserDashboardController::class, 'index'])->name('dashboard');
+Route::middleware(['auth','user'])->group(function () {
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+    Route::get('/profile', [ProfileController::class, 'index'])->name('profile');
 });
 
 Route::middleware(['auth', 'admin'])->group(function () {
@@ -101,11 +102,19 @@ Route::get('/news/{slug}', [NewsController::class, 'show'])->name('news.show');
 
 Route::prefix('admin')->middleware('admin')->name('admin.')->group(function () {
 
-    Route::get('/', [AdminController::class, 'index'])->name('dashboard');
+    
     Route::delete('/admin/posts/{id}', [PostController::class, 'destroy'])->name('posts.destroy');
 
-    
+
 });
+Route::get('/admin/users', [AdminUserController::class, 'index'])->name('admin.users.index'); 
+route::get('/admin/users/edit/{id?}',[AdminUserController::class,'edit'])->name('admin.users.edit');
+Route::put('/admin/users/{id}', [AdminUserController::class, 'update'])->name('admin.users.update');
+Route::delete('/users/{id}', [AdminUserController::class, 'destroy'])->name('admin.users.destroy');
+
+
+Route::get('/admin/index', [AdminController::class, 'index'])->name('admin.index');
+ 
 Route::get('/admin/posts/edit/{id?}',[AdminController::class,'edit'])->name('admin.edit');
 
 Route::post('/admin/posts/edit/{id?}',[AdminController::class,'update'])->name('admin.edit');

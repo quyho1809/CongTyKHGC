@@ -23,29 +23,27 @@ class LoginController extends Controller
         if (Auth::attempt($credentials)) {
             $user = Auth::user();
         
-            if ($user->status == 0) {
+            if ($user->status == 0) { 
                 Auth::logout();
                 return redirect()->route('login')->with('error', 'Tài khoản của bạn đang chờ phê duyệt.');
             }
         
-            if ($user->status == 2) {
+            if ($user->status == 2) { 
                 Auth::logout();
                 return redirect()->route('login')->with('error', 'Tài khoản của bạn đã bị từ chối.');
             }
         
-            if ($user->status == 3) {
+            if ($user->status == 3) { 
                 Auth::logout();
                 return redirect()->route('login')->with('error', 'Tài khoản của bạn đã bị khóa.');
             }
         
-            if ($user->role === 'admin') {
-    return redirect()->route('admin.dashboard')->with('success', 'Đăng nhập thành công!');
-} elseif ($user->role === 'user') {
-    return redirect()->route('dashboard')->with('success', 'Đăng nhập thành công!');
-}
+            if ($user->status === 1) { 
+                return redirect()->route('dashboard')->with('success', 'Đăng nhập thành công!');
+            }
         }
 
-        return back()->with('error', 'Sai tài khoản hoặc mật khẩu');
+        return back()->with('error', 'Sai tài khoản hoặc mật khẩu.');
     }
 
     public function logout(Request $request)
@@ -54,6 +52,6 @@ class LoginController extends Controller
         $request->session()->invalidate();
         $request->session()->regenerateToken();
 
-        return redirect('/login')->with('message', 'Đăng xuất thành công!');
+        return redirect()->route('login')->with('message', 'Đăng xuất thành công!');
     }
 }
